@@ -18,19 +18,10 @@ import java.util.Map;
 public class HttpClientUtil {
 
     // [핵심 설정] Jackson ObjectMapper 사용 및 설정
-    private static final ObjectMapper OBJECT_MAPPER;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final HttpClient CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5)).build();
 
-    static {
-        OBJECT_MAPPER = new ObjectMapper();
-        // DTO 접근 권한 강제 설정 (null 문제 최종 해결)
-        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        OBJECT_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-        OBJECT_MAPPER.setVisibility(PropertyAccessor.SETTER, JsonAutoDetect.Visibility.ANY);
-        OBJECT_MAPPER.setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY);
-        OBJECT_MAPPER.setVisibility(PropertyAccessor.CREATOR, JsonAutoDetect.Visibility.ANY);
-    }
 
     // =========================================================================
     // 1. GET (데이터 조회)
