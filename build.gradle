@@ -27,7 +27,12 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+    // Spring WebFlux (WebClient 사용 시 필수)
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // Jackson (JSON 파싱용, Spring Boot Web 스타터에 기본 포함되나 명시)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.google.code.gson:gson:2.10.1' // Gson 라이브러리 추가
+    compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
