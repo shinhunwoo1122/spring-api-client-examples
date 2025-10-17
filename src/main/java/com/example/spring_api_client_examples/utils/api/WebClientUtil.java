@@ -1,5 +1,6 @@
 package com.example.spring_api_client_examples.utils.api;
 
+import com.example.spring_api_client_examples.dto.FileMetaData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -62,7 +63,6 @@ public class WebClientUtil {
         log.error("WebClient Network Error: {}", e.getMessage());
         return Mono.just(ApiResponse.fail(503, "WebClient Network Failure or Timeout: " + e.getMessage()));
     }
-
 
     // =========================================================================
     // GET (데이터 조회) - 수정 완료
@@ -138,5 +138,25 @@ public class WebClientUtil {
                 .uri(path)
                 .exchangeToMono(clientResponse -> processClientResponse(clientResponse, Void.class))
                 .onErrorResume(WebClientUtil::handleNetworkError);
+    }
+// (POST, DELETE 등 다른 CRUD 메소드들은 동일한 패턴을 가지므로 주석은 get 메서드에 집중했습니다.)
+    // ...
+
+    // =========================================================================
+    // FILE DOWNLOAD (FileDownloadUtil로 위임) - 추가된 기능
+    // =========================================================================
+    /**
+     * 외부 API에서 파일을 다운로드하고 로컬 임시 디렉토리에 저장합니다.
+     * 파일 스트리밍/I/O 로직은 FileDownloadUtil에 위임합니다.
+     * @param baseUrl 파일 서버의 기본 URL
+     * @param path 다운로드할 파일 경로
+     * @return 파일 메타데이터 및 최종 저장 경로를 담은 Mono<FileMetaData>
+     */
+    public static Mono<FileMetaData> downloadFile(String baseUrl, String path) {
+        log.info("---- WebClient DOWNLOAD Util 호출 base: {}, Path: {} ----", baseUrl, path);
+        WebClient webClient = getWebClient(baseUrl); // WebClient 인스턴스 생성
+
+        // 실제 파일 스트리밍 및 I/O 로직은 FileDownloadUtil의 정적 메소드를 호출하여 처리합니다.
+        return FileDownloadUtil.downloadFile(webClient, path);
     }
 }

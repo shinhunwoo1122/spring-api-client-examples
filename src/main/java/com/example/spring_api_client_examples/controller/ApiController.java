@@ -1,5 +1,6 @@
 package com.example.spring_api_client_examples.controller;
 
+import com.example.spring_api_client_examples.dto.FileMetaData;
 import com.example.spring_api_client_examples.dto.Post;
 import com.example.spring_api_client_examples.dto.PostRequest;
 import com.example.spring_api_client_examples.service.ApiService;
@@ -156,5 +157,69 @@ public class ApiController {
     @DeleteMapping("/delete/webclient/{id}")
     public Mono<ResponseEntity<ApiResponse<Void>>> deleteWebClient(@PathVariable String id) {
         return mapAsyncResponse(apiService.deletePostWebClient());
+    }
+
+// =========================================================================
+    // 6. 파일 다운로드 엔드포인트 (DOWNLOAD) - 확장
+    // =========================================================================
+
+    /**
+     * GET /api/v1/download/webclient/jpg
+     */
+    @GetMapping("/download/webclient/jpg")
+    public Mono<ResponseEntity<FileMetaData>> downloadJpgFileWebClient() {
+        return apiService.downloadJpgFile()
+                .map(metaData -> ResponseEntity.ok(metaData))
+                .onErrorResume(e -> {
+                    log.error("파일 다운로드 처리 중 치명적인 오류 발생: {}", e.getMessage());
+                    return Mono.just(ResponseEntity
+                            .status(HttpStatus.SERVICE_UNAVAILABLE)
+                            .body(null));
+                });
+    }
+
+    /**
+     * GET /api/v1/download/webclient/png
+     */
+    @GetMapping("/download/webclient/png")
+    public Mono<ResponseEntity<FileMetaData>> downloadPngFileWebClient() {
+        return apiService.downloadPngFile()
+                .map(metaData -> ResponseEntity.ok(metaData))
+                .onErrorResume(e -> {
+                    log.error("PNG 파일 다운로드 처리 중 치명적인 오류 발생: {}", e.getMessage());
+                    return Mono.just(ResponseEntity
+                            .status(HttpStatus.SERVICE_UNAVAILABLE)
+                            .body(null));
+                });
+    }
+
+    /**
+     * GET /api/v1/download/webclient/pdf
+     */
+    @GetMapping("/download/webclient/pdf")
+    public Mono<ResponseEntity<FileMetaData>> downloadPdfFileWebClient() {
+        return apiService.downloadPdfFile()
+                .map(metaData -> ResponseEntity.ok(metaData))
+                .onErrorResume(e -> {
+                    log.error("PDF 파일 다운로드 처리 중 치명적인 오류 발생: {}", e.getMessage());
+                    return Mono.just(ResponseEntity
+                            .status(HttpStatus.SERVICE_UNAVAILABLE)
+                            .body(null));
+                });
+    }
+
+    /**
+     * GET /api/v1/download/webclient/mp4
+     */
+    @GetMapping("/download/webclient/mp4")
+    public Mono<ResponseEntity<FileMetaData>> downloadMp4FileWebClient() {
+        return apiService.downloadMp4File()
+                .map(metaData -> ResponseEntity.ok(metaData))
+                .onErrorResume(e -> {
+                    log.error("MP4 파일 다운로드 처리 중 치명적인 오류 발생: {}", e.getMessage());
+                    return Mono.just(ResponseEntity
+                            .status(HttpStatus.SERVICE_UNAVAILABLE)
+                            .body(null));
+                });
     }
 }

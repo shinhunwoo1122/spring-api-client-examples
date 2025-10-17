@@ -148,10 +148,10 @@ public class RestTemplateUtil {
     // [최종 수정]: T 타입을 명시적으로 받아 타입 추론 오류 해결
     private static <T> ApiResponse<T> handleHttpError(HttpStatusCodeException e, Class<T> responseType) {
         String body = e.getResponseBodyAsString();
-        String details = String.format("HTTP Error %d. Body: %s", e.getRawStatusCode(), body);
+        String details = String.format("HTTP Error %d. Body: %s", e.getStatusCode().value(), body);
         log.error("RestTemplate HTTP Error: {}", details);
 
         // T 타입이 무엇이든 (데이터는 없지만) T 타입의 실패 ApiResponse를 반환
-        return ApiResponse.<T>fail(e.getRawStatusCode(), details);
+        return ApiResponse.<T>fail(e.getStatusCode().value(), details);
     }
 }
